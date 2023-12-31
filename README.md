@@ -1,2 +1,2 @@
 # SRTSRCHRPG
-Sorting by Linear Search &amp; Bubble Sort
+Sorting by Linear Search and Bubble Sort
