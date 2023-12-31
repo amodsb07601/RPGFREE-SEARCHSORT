@@ -1,0 +1,115 @@
+     **FREE
+
+     // Declare variables
+     D Option          S              2P 0
+     D Array           S               10I 0 DIM(10)
+     D I               S              2P 0
+     D J               S              2P 0
+     D Temp            S              2P 0
+
+     // Main procedure
+      /FREE
+       // Display menu
+       DSPMENU: 
+         DSPCL(S) TEXT('Menu')
+         DSPATR(HI) TEXT('1. Linear Search')
+         DSPATR(HI) TEXT('2. Bubble Sort')
+         DSPATR(HI) TEXT('3. Exit')
+         IFIN01 = *IN03;
+           LEAVE;
+         ENDIF;
+
+         // Get user input
+         SELECT;
+           WHEN IN01 = '1';
+             CLRIN01;
+             CALL 'LINEARSEARCH';
+           WHEN IN01 = '2';
+             CLRIN01;
+             CALL 'BUBBLESORT';
+           WHEN IN01 = '3';
+             LEAVE;
+         END;
+
+         GOTO DSPMENU;
+      /END-FREE
+
+     // Subprocedure for linear search
+     P LINEARSEARCH   B
+     D LINEARSEARCH   PI
+     D
+     D SearchValue     S              2P 0
+     D Found           S              1A
+
+     D 1               S              2P 0
+     D
+      /FREE
+       // Initialize array
+       FOR I = 1 TO 10;
+         Array(I) = I;
+       ENDFOR;
+
+       // Get search value from user
+       EXSR GETVALUE;
+
+       // Perform linear search
+       Found = 'N';
+       FOR I = 1 TO 10;
+         IF Array(I) = SearchValue;
+           Found = 'Y';
+           DSPCL(S) TEXT('Value found at position ') SearchValue;
+           LEAVE;
+         ENDIF;
+       ENDFOR;
+
+       IF Found = 'N';
+         DSPCL(S) TEXT('Value not found in the array.');
+       ENDIF;
+      /END-FREE
+     P LINEARSEARCH   E
+
+     // Subprocedure for bubble sort
+     P BUBBLESORT     B
+     D BUBBLESORT     PI
+     D
+     D
+      /FREE
+       // Initialize array
+       FOR I = 1 TO 10;
+         Array(I) = 10 - I + 1;
+       ENDFOR;
+
+       // Perform bubble sort
+       FOR I = 1 TO 9;
+         FOR J = 1 TO 10 - I;
+           IF Array(J) > Array(J + 1);
+             // Swap elements
+             Temp = Array(J);
+             Array(J) = Array(J + 1);
+             Array(J + 1) = Temp;
+           ENDIF;
+         ENDFOR;
+       ENDFOR;
+
+       // Display sorted array
+       DSPCL(S) TEXT('Sorted Array:');
+       FOR I = 1 TO 10;
+         DSPCL(S) TEXT(' ') Array(I);
+       ENDFOR;
+      /END-FREE
+     P BUBBLESORT     E
+
+     // Subprocedure to get search value
+     P GETVALUE       B
+     D GETVALUE       PI
+     D
+      /FREE
+       // Get search value from user
+       DSPCL(S) TEXT('Enter search value:');
+       REQIN01 = *ON;
+       DOU IN01 = *BLANKS;
+         // Wait for user input
+       ENDDO;
+       SearchValue = %INT(IN01);
+      /END-FREE
+     P GETVALUE       E
